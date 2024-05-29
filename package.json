@@ -46,7 +46,8 @@
     "react-native-svg": "^14.1.0",
     "react-native-tab-view": "^3.5.2",
     "react-native-web": "~0.19.6",
-    "react-redux": "^8.0.5"
+    "react-redux": "^8.0.5",
+    "expo-system-ui": "~2.9.4"
   },
   "devDependencies": {
     "@babel/core": "^7.12.9"

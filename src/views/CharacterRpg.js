@@ -1,4 +1,4 @@
-import { Dimensions, Pressable, StyleSheet } from 'react-native';
+import { Alert, Dimensions, Pressable, StyleSheet, DeviceEventEmitter, BackHandler } from 'react-native';
 import { NativeBaseProvider, Modal, Button, Input, ScrollView, VStack, View, Box, Stack, StatusBar, Text, Center, Image, Flex, Progress, IconButton, Icon, Link, Spinner, HStack} from "native-base";
 import * as RootNavigation from '../app/RootNavigation';
 import { theme } from '../utils/theme';
@@ -11,6 +11,7 @@ import * as InMemoryCache from "../service/InMemoryStorageService"
 import { changeUserAttribute, getUser, getUserRead, updatePotionVitality } from '../service/UserService';
 import { images } from './SelectCharacter';
 import _ from 'lodash';
+import { backAction } from '../utils/ActionUtil';
 
 const win = Dimensions.get('window');
 
@@ -67,32 +68,38 @@ function CharacterRpg(componentParams) {
         setModalVisible(attribute)
     }
 
+    useEffect(() => {
+        const backHandler = BackHandler.addEventListener(
+          'hardwareBackPress',
+          backAction,
+        );
+    
+        return () => backHandler.remove();
+    }, []);
+
   return (
     <NativeBaseProvider>
-        <StatusBar bg="white" barStyle="light-content" />
-        <Box safeAreaTop bg="black" />
+        <StatusBar backgroundColor={'#16376C'} barStyle="light-content" />
         <Flex>
             <Box paddingTop={2} space={2.5} px={win.width - (win.width - 7)}>
                 {user.user_type === 'Aluno' ?
                     <Flex direction="row-reverse">
+                        <IconButton ml={5} onPress={() => backAction()} icon={<Icon as={Ionicons} name="power" size="lg" color="yellow.300"/>}/>
                         <Center><Text color="coolGray.100">{character.coins}</Text></Center>
                         <Center>
-                            <IconButton icon={<Icon as={FontAwesome5} name="coins" size="md" color="yellow.300"/>}/>
+                            <Icon mr={3} as={FontAwesome5} name="coins" size="md" color="yellow.300"/>
                         </Center>
-                        <Center pr={5}><Text color="coolGray.100">{character.potions}</Text></Center>
+                        <Center pr={6}><Text color="coolGray.100">{character.potions}</Text></Center>
                         <IconButton onPress={() => setPotionModalVisible(true)} icon={<Icon as={Ionicons} name="flask" size="md" color="yellow.300"/>}/>
                         <Center pr={5}><Text color="coolGray.100">{character.vitality}</Text></Center>
                         <IconButton onPress={() => RootNavigation.navigate('Goals')} icon={<Icon as={Ionicons} name="heart" size="md" color="yellow.300"/>}/>
-                        <Icon paddingTop={1} mr={win.width - (win.width - 200)} as={Ionicons} name="arrow-back" color="coolGray.100" size="2xl"/>
                     </Flex> : 
-                    <Flex>
-                        <Icon paddingTop={1} mr={win.width - (win.width - 200)} as={Ionicons} name="arrow-back" color="coolGray.100" size="2xl"/>
-                    </Flex> 
+                    null
                 }
             </Box>
             <Center mt={10}>
                 <Pressable onPress={() => RootNavigation.navigate('Forge', {"id": character.user.id, "race": character.race.name, "color": character.race.color})}>
-                    <Image style={styles.image} source={{uri: images[character.race != undefined ? character.race.name + "_" + character.race.color + (character.classe.name != "Novato" ? "_" + character.classe.name : "")  : null]}} alt="Alternate Text" />
+                    <Image style={styles.image} source={{uri: images[character.race != undefined ? character.race.name + "_" + character.race.color + (character.classe.name != "Novato" && character.classe.name != "Professor" && character.classe.name != "Responsavel" ? "_" + character.classe.name : "")  : null]}} alt="Alternate Text" />
                 </Pressable>
             </Center>
         </Flex>
@@ -104,7 +111,7 @@ function CharacterRpg(componentParams) {
                     <Center pt={1}>
                         <Box px="1">
                                 
-                                <Text fontSize="md" textAlign="left" color="coolGray.400">{character.name} <Text textAlign={'right'} bold>{character.classe != undefined ? character.classe.name : null}</Text></Text>
+                                <Text fontSize="md" textAlign="left" color="coolGray.400">{character.name} <Text textAlign={'right'} bold>{character.classe != undefined ? character.classe.name === "Responsavel" ? "Responsável" : character.classe.name : null}</Text></Text>
                                 { user.user_type === 'Aluno' ? <Text fontSize="xs" textAlign="left" color="warmGray.700">Nível {character.level}</Text> : null }
                         </Box>
                     </Center>
@@ -267,13 +274,13 @@ function CharacterRpg(componentParams) {
               </View>            
             </View> : 
             <View>
-                <Stack mx={4} direction='row' pl={3} space={'2/6'}>
-                    <Text mt={3} fontSize="sm" color="coolGray.600">Grupos de alunos</Text>
+                <Stack mx={4} direction='row' pl={3} space={'1/5'}>
+                    <Text mt={3} fontSize="sm" color="coolGray.600">Grupos de aventureiros</Text>
                     <Link textAlign={'right'} mt={3} fontSize="xs" color="coolGray.600" onPress={() => RootNavigation.navigate('StudentGroup', 'CharacterRpg')}>
                         Visualizar tudo
                     </Link>
                 </Stack>
-                <Box mb={3} mx={4} borderRadius={20} px={7} bg="coolGray.100" minH={win.height - (win.height - 390)} minWidth={win.width - (win.width - 7)} shadow={3}>
+                <Box mb={3} mx={4} borderRadius={20} mt={0.5} px={7} bg="coolGray.100" minH={win.height - (win.height - 440)} minWidth={win.width - (win.width - 7)} shadow={3}>
                     {
                         groups.length > 0 ? groups.map((element, i) => {
                             if(i < 4) {

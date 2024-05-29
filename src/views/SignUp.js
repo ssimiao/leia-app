@@ -217,8 +217,7 @@ function SignUp(callback) {
   console.log(Constants.executionEnvironment)
   return (
     <NativeBaseProvider theme={theme}>
-      <StatusBar bg="white" barStyle="light-content" />
-      <Box safeAreaTop bg="white" />
+      <StatusBar backgroundColor={'white'} barStyle="dark-content" />
       <Center flex={1} px="3" bg="white">
         <ScrollView w="100%"> 
           <Center w="100%">
@@ -260,8 +259,9 @@ function SignUp(callback) {
                   bg: "teal.600",
                   endIcon: <CheckIcon size={5} />
                 }} mt="1">
-                    <Select.Item label="Aluno" value="Aluno" />
+                    <Select.Item label="Criança" value="Aluno" />
                     <Select.Item label="Professor" value="Professor" />
+                    <Select.Item label="Responsável" value="Responsavel" />
                   </Select>
                   { false ? <FormControl.ErrorMessage isDisabled leftIcon={<WarningOutlineIcon size="xs" />}>
                     Por favor, selecione uma opção.

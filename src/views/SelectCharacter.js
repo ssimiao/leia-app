@@ -115,8 +115,7 @@ function SelectCharacter(callback) {
 
   return (
     <NativeBaseProvider theme={theme}>
-      <StatusBar bg="white" barStyle="light-content" />
-      <Box safeAreaTop bg="white" />
+      <StatusBar backgroundColor={'white'} barStyle="dark-content" />
       <Center flex={1} px="3" bg="white">
         <ScrollView w="100%"> 
             <Center w="100%">

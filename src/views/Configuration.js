@@ -87,8 +87,7 @@ function Configuration(componentParams) {
 
   return (
     <NativeBaseProvider>
-        <StatusBar bg="white" barStyle="light-content" />
-        <Box safeAreaTop bg="black" />
+        <StatusBar backgroundColor={'white'} barStyle="dark-content" />
         <ScrollView  borderTopRadius={10} minHeight={win.height} w="100%" maxWidth={win.width} bg="#FFF" safeArea>
 
           <VStack px="1" w="100%">

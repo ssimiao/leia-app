@@ -34,8 +34,7 @@ function Goals(callback) {
 
   return (
     <NativeBaseProvider>
-        <StatusBar bg="white" barStyle="light-content" />
-        <Box safeAreaTop bg="black" />
+        <StatusBar bg="white" barStyle="dark-content" />
         <Box borderTopRadius={10} minHeight={win.height} w="100%" maxWidth={win.width} bg="#041838" safeArea>
 
           <VStack px="1" w="100%">

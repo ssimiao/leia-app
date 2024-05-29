@@ -104,14 +104,9 @@ const styles = StyleSheet.create({
 function Challenge(navigation) {
 
     const [read, setRead] = useState(navigation.route.params);  
-    const challengeChoose = getRandomInt(0, read.book.challenge.length);
-    const abc = ['A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z']
-    console.log(challengeChoose)
     const [challenge, setChallenge] = useState(_.sample(read.book.challenge));  
-    console.log(challenge)
     const [challengeParse, setChallengeParse] = useState(challenge.challenge_type === "memory" ? challenge.challenge : JSON.parse(challenge.challenge));  
-    const [wordsDiscover, setWordsDiscover] = useState([])
-    const [newWordsDiscover, setNewWordsDiscover] = useState([])
+    
     const [myTime, setMyTime] = useState(new Date());
     const [timer, setTimer] = useState(0);
     const [refreshData, setRefresh] = useState(0);
@@ -122,6 +117,12 @@ function Challenge(navigation) {
     const [matches, setMatches] = useState(0);
     const [gameWon, setGameWon] = useState(false);
     const [chooses, setChooses] = useState(0);
+    //
+
+    //Variaveis Caça Palavra
+    const [wordsDiscover, setWordsDiscover] = useState([])
+    const [newWordsDiscover, setNewWordsDiscover] = useState([])
+    const [wordSearchMatriz, setWordSearchMatriz] = useState([])
     //
 
     function getRandomInt(min, max) {
@@ -184,9 +185,10 @@ function Challenge(navigation) {
                         </Box>
                     </Box>
         } else if (challenge.challenge_type === "search" ) {
+            wordSearchMapPopulate()
             if(Array.from(challengeParse.words).every(word => wordsDiscover.includes(word))) {
-                resolveChallenge(read.id, read.user.id)
                 setWordsDiscover([])
+                resolveChallenge(read.id, read.user.id)
                 showMessageDefault("Parabéns, você concluiu o desafio! Vamos te levar te volta pra tela do seu personagem")
             }
 
@@ -196,9 +198,10 @@ function Challenge(navigation) {
                         captureChallengeResult(read.user.id, "F")
                         showMessageDefault("Você não conseguiu completar o desafio no tempo certo.")
                         RootNavigation.navigate('CharacterRpg')
+                    } else {
+                        setTimer(timer + 1)
+                        tick()
                     }
-                    setTimer(timer + 1)
-                    tick()
                 }, 1000);
                 
                 return () => clearInterval(timerID);
@@ -217,7 +220,7 @@ function Challenge(navigation) {
                         <Box minW={380} mx={10} borderRadius={'10'} bg={'coolGray.100'} shadow={3}>
                             <Center>
                                 {
-                                    wordSearch().map((element, i) => {
+                                    wordSearchMatriz.map((element, i) => {
                                         return <Text fontSize="lg" style={{ letterSpacing: 5 }}>{element}</Text>
                                     })
                                 }
@@ -226,30 +229,19 @@ function Challenge(navigation) {
                         <Input mx={10} mt={3} onChangeText={text => {
                             if((challengeParse.words.includes(text) || challengeParse.words.includes(text.toUpperCase()) ) && 
                                 (!wordsDiscover.includes(text) || !wordsDiscover.includes(text.toUpperCase())) ) {
-                                console.log("encontrou")
                                 wordsDiscover.push(text.toUpperCase())
                                 setWordsDiscover(wordsDiscover)
                                 setRefresh(refreshData + 1)
+                                showMessageDefault(`Você encontrou a palavra: ${text}`)
                             } 
                         }}></Input>
                         {
                             refresh()
                         }
                         
-                        { /*
-                            challengeParse.words.map((element) => {
-                                console.log(element)
-                                console.log(wordsDiscover)
-                                if(wordsDiscover.includes(element) || wordsDiscover.includes(element.toUpperCase())) {
-                                    return <Text mx={10}>{element}</Text>
-                                }
-                            }) */
-                        }
                         <Text bold mt={3} mx={10}>Palavras encontradas: </Text>
                         {
                             wordsDiscover.map((element) => {
-                                console.log(element)
-                                console.log(wordsDiscover)
                                 if(challengeParse.words.includes(element) || challengeParse.words.includes(element.toUpperCase())) {
                                     return <Text mx={10}>{element}</Text>
                                 }
@@ -337,16 +329,18 @@ function Challenge(navigation) {
         }
     }
 
-    function wordSearch() {
-        return challengeParse.words.map((element, i) => {
-            const position = getRandomInt(0, 19 - element.length)
-            var row = randStr(position) + element
-            if(row.length !== 19) {
-                row = row + randStr(19 - row.length)
-            }
-            console.log(row.length)
-            return row
-        })
+    function wordSearchMapPopulate() {
+        if(wordSearchMatriz == null || wordSearchMatriz.length == 0) {
+            const mapOfWord = challengeParse.words.map((element, i) => {
+                const position = getRandomInt(0, 19 - element.length)
+                var row = randStr(position) + element
+                if(row.length !== 19) {
+                    row = row + randStr(19 - row.length)
+                }
+                return row
+            })
+            setWordSearchMatriz(mapOfWord)
+        }
     }
 
     function randStr(len, chars='ABCDEFGHIJKLMNOPQRSTUVWXYZ') {
@@ -357,8 +351,7 @@ function Challenge(navigation) {
 
     return (
         <NativeBaseProvider>
-            <StatusBar bg="white" barStyle="light-content" />
-            <Box safeAreaTop bg="white" />
+            <StatusBar backgroundColor={'white'} barStyle="dark-content" />
             <Box w="100%" maxWidth={win.width} height={win.height} bg={'white'}>
                 <Box paddingTop={2} px={win.width - (win.width - 7)}>
                     <Stack direction={'row'} space={"1/6"}>

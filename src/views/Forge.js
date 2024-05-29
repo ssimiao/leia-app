@@ -38,8 +38,6 @@ const styles = StyleSheet.create({
 
 function Forge(callback) {
 
-    console.log(callback.route.params.id)
-    console.log(images[callback.route.params.race + "_" + callback.route.params.color + "_" + "guerreiro"])
     const [classes, setClasses] = useState([])
 
     InMemoryCache.getJson("classes").then(classesCache => {
@@ -58,29 +56,23 @@ function Forge(callback) {
 
   return (
     <NativeBaseProvider>
-        <StatusBar bg="white" barStyle="light-content" />
-        <Box safeAreaTop bg="black" />
+        <StatusBar backgroundColor={'white'} barStyle="dark-content" />
         <Image style={styles.image} source={require('../../assets/guilda.jpg')} alt="Alternate Text" />
-        
 
         <Box borderTopRadius={10} minHeight={win.height} w="100%" maxWidth={win.width} bg="warning.300" safeArea>
 
           <VStack px="1" w="100%">
-            <Center>
-                <Box px="1">
-                    <Text fontSize="xl" textAlign="left" bold color="coolGray.800">Guilda: escolha sua nova classe</Text>
-                </Box>
-            </Center>
-            <Text fontSize="md" textAlign="center" bold color="coolGray.800">custo: 50 moedas</Text>
+                <Text fontSize="md" textAlign="center" bold color="coolGray.800">Escolha sua nova classe | <Text fontSize="sm" textAlign="center" bold color="coolGray.800">Custo: 50 Moedas</Text></Text>
+                
             
-            <View paddingTop={3} w="100%">
+            <View paddingTop={1} w="100%">
                 <Box>
                     <Stack mx={30} direction={'row'} space={'lg'}>
                         {
                             classes.map((element, i) => {
                                 return (
                                     <Pressable onPress={() => {
-                                        if (true)
+                                        if (element.blocked == false)
                                             changeClasse(element.classe)
                                         else
                                             Service.showMessageDefault("Classe bloqueada, precisa atender os requisitos necessários")

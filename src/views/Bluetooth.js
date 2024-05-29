@@ -238,10 +238,25 @@ function Bluetooth(componentParams) {
       return <Image style={styles.image} source={require('../../assets/wireless-off.png')} alt="Sem conexão" />
   }
 
+  setTimeout(() => {
+    if (connectedDevices.length > 0) {
+      BleManager.retrieveServices(connectedDevices[0].id).then((peripheralInfo) => {
+        BleManager.read(connectedDevices[0].id, "1b9d0504-79f2-11ee-b962-0242ac120002", "e7ca6c9c-79f3-11ee-b962-0242ac120002").then((dataConsole) => {
+          setConnectedInfo(Buffer.from(dataConsole).toString())
+          showMessageDefault(Buffer.from(dataConsole).toString())
+        }).catch((reason) => {
+          showMessageDefault("Erro ao tentar sincronizar os dados")
+        })
+      }).catch((reason) => {
+        showMessageDefault("Falhou ao tentar ler dados do console via bluetooth")
+      })
+    }
+  }, 5000);
+
   return (
     <NativeBaseProvider>
       <SafeAreaView>
-        <StatusBar/>
+        <StatusBar barStyle={'dark-content'}/>
         <View style={{pdadingHorizontal: 20, backgroundColor: '#fff', height: '100%' }}>
           <Center pb={3}>
             <Heading pb={5}>
@@ -388,7 +403,6 @@ function Bluetooth(componentParams) {
               </Text>
             </Button>
             
-            
             { 
               discoveredDevices.length > 0 ? discoveredDevices.map((value, index) => {
                 if(String(value.name).toUpperCase() == "ESP32_BLE" && isScanning) {
@@ -396,7 +410,6 @@ function Bluetooth(componentParams) {
                 }
               }) : null
             }
-            
             
             <Box mt={10} bgColor={'blueGray.500'} rounded={10} shadow={3} py={2}>
               <Text>

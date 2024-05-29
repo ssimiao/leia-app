@@ -67,8 +67,7 @@ function BookInfo(callback) {
 
   return (
     <NativeBaseProvider>
-        <StatusBar bg="white" barStyle="light-content" />
-        <Box safeAreaTop bg="black" />
+        <StatusBar backgroundColor={'#16376C'} barStyle="light-content" />
         <Flex>
             <Box paddingTop={2} px={win.width - (win.width - 7)}>
                 <Stack direction={'row'} space={"1/6"}>
@@ -165,7 +164,7 @@ function BookInfo(callback) {
                                             showMessageDefault("Você não pode diminuir o valor das paginas lidas")
                                             setLoading(false)
                                         }
-                                    }}>{loading ? <Spinner/> : 'Alterar Atributo' }</Button>
+                                    }}>{loading ? <Spinner/> : 'Alterar Paginas' }</Button>
                                 </Button.Group>
                             </Modal.Body>
                         </Modal.Content>

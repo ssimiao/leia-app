@@ -57,8 +57,7 @@ function StudentGroup(componentParams) {
 
   return (
     <NativeBaseProvider>
-        <StatusBar bg="white" barStyle="light-content" />
-        <Box safeAreaTop bg="black" />
+        <StatusBar backgroundColor={'white'} barStyle="dark-content" />
         <Box borderTopRadius={10} minHeight={win.height - 150} h={"100%"} w="100%" maxWidth={win.width} bg="coolGray.100" safeArea>
           <Box paddingTop={2} px={win.width - (win.width - 7)}>
               <Stack direction={'row'} space={"1/6"}>

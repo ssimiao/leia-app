@@ -39,15 +39,12 @@ function GroupInfo(componentParams) {
     const [isbn, setIsbn] = useState("");
 
     const [groupInfo, setGroupInfo] = useState(componentParams.route.params);
-    console.log(groupInfo.data.books_recommended.length)
   return (
     <NativeBaseProvider>
-        <StatusBar bg="white" barStyle="light-content" />
-        <Box safeAreaTop bg="black" />
+        <StatusBar backgroundColor={'#16376C'} barStyle="light-content" />
         <Flex>
             <Center paddingTop={2} px={win.width - (win.width - 7)}>
                 <Stack direction={'row'} space={"1/6"}>
-                    { /* <IconButton onPress={() => RootNavigation.navigate(callback.route.params.view)} pr={3}  icon={<Icon size="2xl" color="coolGray.100" as={Ionicons} name="arrow-back"/>}/> */ }
                     <Text mt={3}  minW={'50'} fontSize={'lg'} color={"coolGray.100"}>Grupo</Text>
                 </Stack>
             </Center>
@@ -101,7 +98,7 @@ function GroupInfo(componentParams) {
                         addBookToGroup({
                             'name': groupInfo.data.group_name,
                             'characters_id': charactersId.split('-').map(id => Number.parseInt(id)),
-                            'isbn': isbn  
+                            'isbn': isbn,
                         }, groupInfo.data.owner, groupInfo.data.id, setGroupInfo, setLoading)
                         .then(() => setLoading(false))
                     }}>
@@ -121,7 +118,7 @@ function GroupInfo(componentParams) {
             </Center>
 
             <Stack mt={3} mx={5} direction='row' pl={3} space={'3/6'}>
-                <Heading pr={5} pl={2} mt={3} fontSize="lg" color="coolGray.800">Integrantes</Heading>
+                <Heading pl={2} mt={3} fontSize="lg" color="coolGray.800">Aventureiros</Heading>
                 <IconButton onPress={() => setModalVisible(true)} icon={<Icon as={Ionicons} name="add" size="xl" color="coolGray.800"/>}/>
             </Stack>
             <ScrollView mb={3} mx={4} borderRadius={20} px={7} bg="coolGray.100" maxH={200} minH={200} minWidth={win.width - (win.width - 7)} shadow={3}>
@@ -143,7 +140,7 @@ function GroupInfo(componentParams) {
                                         <Center alignItems={'initial'} pl={1} minWidth={100}>
                                             <Text bold>{element.classe.name}</Text>
                                         </Center>
-                                        <Center pl={1} minW={100}>
+                                        <Center pl={1} >
                                             <Text bold>Level: {element.level}</Text>
                                         </Center>
                                     </Stack>
@@ -168,14 +165,14 @@ function GroupInfo(componentParams) {
             <ScrollView mb={3} mx={4} borderRadius={20} px={7} bg="coolGray.100" maxH={200} minH={200} minWidth={win.width - (win.width - 7)} shadow={3}>
                 {
                     groupInfo.data.books_recommended.length > 0 ? groupInfo.data.books_recommended.map((element, i) => {
-                        console.log(element)
+                        const percentage = (element.finish_readers / element.number_of_readers) * 100
                         return (
                             <Box my={1}>
                                 
                                 <Stack pb={2} direction={'row'}>
                                     <Pressable>
                                         <Text bold>{element.name}</Text>
-                                        <Progress  minW={320} size={'sm'}  value={10} colorScheme="blueGray"/>
+                                        <Progress  minW={320} size={'sm'}  value={percentage} colorScheme="blueGray"/>
                                     </Pressable>
                                 </Stack>
                                 <Divider/>

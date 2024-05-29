@@ -136,8 +136,7 @@ function GenerateGame(callback) {
 
   return (
     <NativeBaseProvider>
-        <StatusBar bg="white" barStyle="light-content" />
-        <Box safeAreaTop bg="black" />
+        <StatusBar backgroundColor={'#A87D54'} barStyle="dark-content" />
         <Box borderTopRadius={10} minHeight={win.height} w="100%" maxWidth={win.width} bg="#A87D54" safeArea>
 
           <VStack pt={3} px="1" w="100%">
@@ -164,14 +163,9 @@ function GenerateGame(callback) {
                         </Center>
                         { 
                             manualGame ? manualGameForm() :
-                            <Stack direction={'row'} space={'2'} mx={7}>
-                                <Button minW={'150'} mt="2" style={{backgroundColor: "#A87D54"}} onPress={() => setManualGame(true)}>
-                                    {loading ? <Spinner size={"sm"} color="warning.500" /> : "Criar Desafio Manual"}
-                                </Button>
-                                <Button minW={'150'} mt="2" style={{backgroundColor: "#A87D54"}} onPress={() => {}}>
-                                    {loading ? <Spinner size={"sm"} color="warning.500" /> : "Gerar Desafio"}
-                                </Button>
-                            </Stack>
+                            <Button mx={5} minW={'150'} mt="2" style={{backgroundColor: "#A87D54"}} onPress={() => setManualGame(true)}>
+                                {loading ? <Spinner size={"sm"} color="warning.500" /> : "Criar Desafio Manual"}
+                            </Button>
                         }
                     </Box>
                 </Center>

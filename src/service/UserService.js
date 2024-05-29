@@ -11,7 +11,8 @@ export const api = create({
     baseURL: 'https://leia-back.onrender.com/v1',
     headers: {
         "Content-Type": "application/json"
-    }
+    },
+    timeout: 15000
 })
 
 export async function setToken() {
@@ -28,7 +29,6 @@ export function showMessageDefault(message) {
         message: message,
         type: "default",
         backgroundColor: "#041838",
-        statusBarHeight: StatusBar.currentHeight
     });
 }
 
@@ -177,7 +177,8 @@ export async function addBookToGroup(body, userId, groupId, setGroup, setLoading
             getStudentGroup(userId).then(() => {
                 getStudentGroupById(userId, groupId, setGroup)
             })
-            RootNavigation.navigate("GenerateGame")
+            if (response.data.user_type === "Professor")
+                RootNavigation.navigate("GenerateGame")
         } else {
             showMessageDefault("Falha ao adicionar livro no grupo");
         }
@@ -263,6 +264,7 @@ export async function resolveChallenge(readId, userId) {
             'data': 'desafio resolvido'
         }
     ).then(response => {
+        console.log("enviou requisição")
         if (response.ok) {
             setTimeout(() => {
                 getUser(userId)
@@ -455,6 +457,12 @@ export async function getBook(value, setLoading) {
         setLoading(false)
         return response
     })
+}
+
+export async function getBookshelf() {
+    return api.get(
+        "/books"
+    )
 }
 
 export async function postBookChallenge(body, setLoading) {

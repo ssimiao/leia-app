@@ -25,8 +25,7 @@ function Initial( params ) {
 
     return (
       <NativeBaseProvider theme={theme}>
-        <StatusBar bg="white" barStyle="light-content" />
-        <Box safeAreaTop bg="white" />
+        <StatusBar backgroundColor={'white'} barStyle="dark-content" />
         <Center paddingTop={100} flex={1} px="3" bg="white">
           <ScrollView w="100%">          
             <Center w="100%">
@@ -47,7 +46,7 @@ function Initial( params ) {
                       fontWeight: "500",
                       color: "coolGray.600"
                     }} alignSelf="flex-end" >
-                      É professor? clique aqui.
+                      É professor ou responsável? clique aqui.
                   </Link>
                   <Button style={{backgroundColor: "rgba(4, 24, 56, 1)"}} onPress={() => {
                       RootNavigation.navigate('SelectCharacter')

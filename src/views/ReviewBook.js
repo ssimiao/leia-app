@@ -75,8 +75,7 @@ function ReviewBook(componentParams) {
 
   return (
     <NativeBaseProvider>
-        <StatusBar bg="white" barStyle="light-content" />
-        <Box safeAreaTop bg="black" />
+        <StatusBar backgroundColor={'#A87D54'} barStyle="dark-content" />
         <Box borderTopRadius={10} minHeight={win.height} w="100%" maxWidth={win.width} bg="#A87D54" safeArea>
 
           <VStack pt={3} px="1" w="100%">

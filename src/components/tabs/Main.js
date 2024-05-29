@@ -6,13 +6,14 @@ import GameMaster from "../../views/GameMaster";
 import Login from "../../views/Login";
 import Scan from "../../views/Scan";
 import { useSelector } from 'react-redux';
+import * as InMemoryCache from "../../service/InMemoryStorageService"
 import CharacterRpg from '../../views/CharacterRpg';
 import BookShelf from '../../views/BookShelf';
 import Configuration from '../../views/Configuration';
 import Map from '../../views/Map';
 import ReviewBook from '../../views/ReviewBook';
 import StudentGroup from '../../views/StudentGroup';
-
+import Forge from '../../views/Forge'
 
 const Tab = createBottomTabNavigator();
 
@@ -20,6 +21,12 @@ function MainTab(componentParams) {
   
   const user_type = componentParams.route.params.user.user_type;
 
+  var char = componentParams.route.params
+  InMemoryCache.getJson("char").then(characterCache => {
+    if (characterCache != null) {
+      char = characterCache
+    }
+  })
 
   function showUserTabButton() {
     console.log(user_type)
@@ -45,7 +52,7 @@ function MainTab(componentParams) {
               } else if (route.name === 'Master') {
                 iconName = 'human-white-cane';
                 iconType = 'MaterialCommunityIcons';
-              } else if (route.name === 'Guild') {
+              } else if (route.name === 'Forge') {
                 iconName = 'shop';
                 iconType = 'Entypo';
               } else if (route.name === 'Configuration') {
@@ -81,11 +88,12 @@ function MainTab(componentParams) {
               showUserTabButton() ? <>
                 <Tab.Screen name="CharacterRpg" component={CharacterRpg} initialParams={componentParams.route.params} options={{tabBarLabel:'Personagem', headerShown: false}}/>
                 <Tab.Screen name="BookShelf" component={BookShelf} options={{tabBarLabel:'Missões', headerShown: false}}/>
+                <Tab.Screen name="Forge" component={Forge} initialParams={{"id": char.user.id, "race": char.race.name, "color": char.race.color}}  options={{tabBarLabel:'Guilda', headerShown: false}}/>
                 <Tab.Screen name="Configuration" component={Configuration} initialParams={componentParams.route.params}  options={{tabBarLabel:'Configuração', headerShown: false}}/>
               </> :
               <>
                 <Tab.Screen name="CharacterRpg" component={CharacterRpg} initialParams={componentParams.route.params} options={{tabBarLabel:'Personagem', headerShown: false}}/>
-                <Tab.Screen name="ReviewBook" component={ReviewBook}   options={{tabBarLabel:'Recomendações', headerShown: false}}/>
+                {user_type === 'Professor' ? <Tab.Screen name="ReviewBook" component={ReviewBook}   options={{tabBarLabel:'Recomendações', headerShown: false}}/> : null }
                 <Tab.Screen name="StudentGroup" component={StudentGroup} initialParams={componentParams.route.params}  options={{tabBarLabel:'Grupos', headerShown: false}}/>
                 <Tab.Screen name="Configuration" component={Configuration} initialParams={componentParams.route.params}  options={{tabBarLabel:'Configuração', headerShown: false}}/>
               </>

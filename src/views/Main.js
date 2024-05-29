@@ -19,16 +19,24 @@ import GenerateGame from './GenerateGame';
 import GroupInfo from './GroupInfo';
 import Bluetooth from './Bluetooth';
 import MemoryGame from './MemoryGame';
+import * as InMemoryCache from "../service/InMemoryStorageService"
 
 const Stack = createNativeStackNavigator();
 
 function Main() {
   const isLogged = useSelector((state) => state.login.isLogged);
   const initialRoute = isLogged === true ? "Home" : "Login";
-  console.log(initialRoute);
+  
+  const initialScreen = InMemoryCache.getJson("char").then(characterCache => {
+    console.log(characterCache)
+    if (characterCache != null) {
+      return "Login"
+    }
+    return "Initial"
+  })
 
   return (
-    <Stack.Navigator screenOptions={{ headerShown: false }} initialRouteName={"Initial"}>
+    <Stack.Navigator screenOptions={{ headerShown: false }} initialRouteName={initialScreen}>
     { isLogged === false ? (
       <>       
         <Stack.Screen name="Initial" component={Initial} />

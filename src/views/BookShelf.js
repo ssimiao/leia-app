@@ -61,8 +61,7 @@ function BookShelf(callback) {
 
   return (
     <NativeBaseProvider>
-        <StatusBar bg="white" barStyle="light-content" />
-        <Box safeAreaTop bg="white" />
+        <StatusBar backgroundColor={'white'} barStyle="dark-content" />
         <Box w="100%" maxWidth={win.width} height={win.height} bg={'white'}>
             <Box paddingTop={2} px={win.width - (win.width - 7)}>
                 <Stack direction={'row'} space={"1/6"}>
