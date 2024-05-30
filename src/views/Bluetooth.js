@@ -301,7 +301,7 @@ function Bluetooth(componentParams) {
                       "level": char.level,
                       "coins": char.coins,
                       "quests": [],
-                      "attributtes": [
+                      "attributes": [
                         {
                           "id": "forca",
                           "name": "Forca",
